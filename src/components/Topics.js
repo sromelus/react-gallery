@@ -1,44 +1,26 @@
 import React from 'react';
-import Images from './Images'
-
-const Topics = (props) => {
-
-  const { images } = props;
-
-  console.log(images);
-
-  const imageLists = images.map( image => {
-    return(
-      <Images
-        key={image.id}
-        id={image.id}
-        server={image.server}
-        secret={image.secret}
-        farm={image.farm}
-      />
-    )
-  })
+import ImageContainer from './ImageContainer'
+import { Link, BrowserRouter, Route, Switch } from 'react-router-dom';
 
 
+const Topics = () => {
 
   return(
-    <div>
-      <nav className="main-nav">
-        <ul>
-          <li><a href='#'>Cats</a></li>
-          <li><a href='#'>Dogs</a></li>
-          <li><a href='#'>Computers</a></li>
-        </ul>
-      </nav>
+    <BrowserRouter>
+      <div>
+        <nav className="main-nav">
+          <ul>
+            <li><Link to='/cats'>Cats</Link></li>
+            <li><Link to='/dogs'>Dogs</Link></li>
+            <li><Link to='/computers'>Computers</Link></li>
+          </ul>
+          <h2>Results</h2>
+        </nav>
 
-      <div className="photo-container">
-        <h2>Results</h2>
-        <ul>
-          {imageLists}
-        </ul>
+        <Route exact path='/cats' render={ () => <ImageContainer tag='dogs' />} />
+
       </div>
-    </div>
-
+    </BrowserRouter>
   )
 }
 
