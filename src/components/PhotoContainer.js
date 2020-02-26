@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import ImageTile from './ImageTile'
+import PhotoTile from './PhotoTile'
 import config from '../config'
 
 const api_key = config;
 
-class ImageContainer extends Component {
+class PhotoContainer extends Component {
   constructor() {
    super();
    this.state = {
@@ -13,7 +13,8 @@ class ImageContainer extends Component {
   }
 
   componentDidMount(){
-    fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${api_key}&tags=plane&per_page=24&format=json&nojsoncallback=1`)
+    console.log(this.state.tag);
+    fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${api_key}&tags=${this.state.tag}&per_page=24&format=json&nojsoncallback=1`)
       .then(response => response.json())
       .then(body => body.photos.photo)
       .then(photo => {
@@ -24,24 +25,22 @@ class ImageContainer extends Component {
 
 
   render(){
-
-    console.log(this.props);
-
     const imageLists = this.state.imageData.map( image => {
         return(
-          <ImageTile
-          key={image.id}
-          id={image.id}
-          server={image.server}
-          secret={image.secret}
-          farm={image.farm}
-          title={image.title}
+          <PhotoTile
+            key={image.id}
+            id={image.id}
+            server={image.server}
+            secret={image.secret}
+            farm={image.farm}
+            title={image.title}
           />
         )
       })
 
     return (
       <div className="photo-container">
+        <h2>Results</h2>
         <ul>
           {imageLists}
         </ul>
@@ -50,4 +49,4 @@ class ImageContainer extends Component {
   }
 }
 
-export default ImageContainer;
+export default PhotoContainer;

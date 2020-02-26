@@ -1,16 +1,28 @@
 import React from 'react';
-import Search from './components/Search'
-import Topics from './components/Topics'
-import ImageContainer from './components/ImageContainer'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import SearchForm from './components/SearchForm'
+import Nav from './components/Nav'
+import PhotoContainer from './components/PhotoContainer'
+import NotFound from './components/NotFound'
+const PhotoContext = React.createContext();
+const { Provider } = PhotoContext;
+const { Consumer } = PhotoContext;
 
 
-const App = () => {
+const App = (props) => {
   return (
-    <div className="container">
-      <Search />
-      <Topics />
-      <ImageContainer />
-    </div>
+    <Provider>
+      <BrowserRouter>
+        <div className="container">
+          <SearchForm />
+          <Nav />
+          <Switch>
+            <Route exact path="/" component={PhotoContainer} />
+            <Route component={NotFound} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    </Provider>
   )
 }
 

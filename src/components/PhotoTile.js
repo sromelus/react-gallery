@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ImageTile = (props) => {
+const PhotoTile = (props) => {
 
   const {id, server, secret, farm, title } = props;
 
@@ -11,4 +11,4 @@ const ImageTile = (props) => {
     )
   }
 
-export default ImageTile;
+export default PhotoTile;
