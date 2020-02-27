@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PhotoTile from './PhotoTile'
+import queryString from 'query-string'
 import config from '../config'
 
 const api_key = config;
@@ -13,8 +14,12 @@ class PhotoContainer extends Component {
   }
 
   componentDidMount(){
-    console.log(this.state.tag);
-    fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${api_key}&tags=${this.state.tag}&per_page=24&format=json&nojsoncallback=1`)
+    // const tag = this.props.match.url.replace('/', '')
+    // ${tag}
+    const queryValue = queryString.parse(this.props.location.search)
+    console.log(this.props.location.search);
+    console.log(queryValue.search);
+    fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${api_key}&tags=''&per_page=24&format=json&nojsoncallback=1`)
       .then(response => response.json())
       .then(body => body.photos.photo)
       .then(photo => {
@@ -25,6 +30,7 @@ class PhotoContainer extends Component {
 
 
   render(){
+
     const imageLists = this.state.imageData.map( image => {
         return(
           <PhotoTile
@@ -50,3 +56,6 @@ class PhotoContainer extends Component {
 }
 
 export default PhotoContainer;
+
+// console.log(this.props.history.push("/search"));
+//
