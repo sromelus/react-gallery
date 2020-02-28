@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PhotoTile from './PhotoTile'
+import Loading from './Loading'
 import queryString from 'query-string'
 import config from '../config'
 
@@ -9,10 +10,13 @@ class PhotoContainer extends Component {
   constructor() {
    super();
    this.state = {
-     imageData: []
+     imageData: [],
+     statusText: ''
    };
   }
 
+
+  // ksfkfsd
   handleTagChange(props) {
     let tag = ' '
     const searchQuery = props.location.search;
@@ -31,9 +35,19 @@ class PhotoContainer extends Component {
     return tag;
   }
 
-  componentDidMount(){
 
-  const currentTag = this.handleTagChange(this.props)
+  handleFetchResult(response) {
+    if (response.length > 0){
+      return response;
+    } else if (response.length === 0 && this.state.statusText === 'ok'){
+      return <h1> Sorry! please search for something else. </h1>
+    } else {
+      return <Loading />
+    }
+  }
+
+  componentDidMount(){
+    const currentTag = this.handleTagChange(this.props)
 
     fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${api_key}&tags=${currentTag}&per_page=24&format=json&nojsoncallback=1`)
       .then(response => {
@@ -46,11 +60,13 @@ class PhotoContainer extends Component {
         }
       })
       .then(response => response.json())
-      .then(body => body.photos.photo)
-      .then(photo => {
-        this.setState({ imageData: photo })
+      .then(response => {
+        this.setState({
+          imageData: response.photos.photo,
+          statusText: response.stat
+        })
       })
-      .catch(error => console.error(`Error in fetch: ${error.message}`));
+      .catch(error => console.error(`Error in fetch: ${error.message}`))
   }
 
 
@@ -73,7 +89,7 @@ class PhotoContainer extends Component {
       <div className="photo-container">
         <h2>Results</h2>
         <ul>
-          {imageLists}
+          {this.handleFetchResult(imageLists)}
         </ul>
       </div>
     )
