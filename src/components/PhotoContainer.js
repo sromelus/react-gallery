@@ -36,12 +36,21 @@ class PhotoContainer extends Component {
   const currentTag = this.handleTagChange(this.props)
 
     fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${api_key}&tags=${currentTag}&per_page=24&format=json&nojsoncallback=1`)
+      .then(response => {
+        if(response.ok) {
+          return response;
+        } else {
+          let errorMessage = `${response.status} (${response.statusText})`
+          const error = new Error(errorMessage);
+          throw(error);
+        }
+      })
       .then(response => response.json())
       .then(body => body.photos.photo)
       .then(photo => {
         this.setState({ imageData: photo })
       })
-      .catch()
+      .catch(error => console.error(`Error in fetch: ${error.message}`));
   }
 
 
