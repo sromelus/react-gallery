@@ -7,6 +7,8 @@ import config from '../config'
 const api_key = config;
 
 class PhotoContainer extends Component {
+  _isMounted = false;
+
   constructor() {
    super();
    this.state = {
@@ -16,7 +18,7 @@ class PhotoContainer extends Component {
   }
 
 
-  // ksfkfsd
+
   handleTagChange(props) {
     let tag = ' '
     const searchQuery = props.location.search;
@@ -28,7 +30,7 @@ class PhotoContainer extends Component {
     } else if (queryPathValue.length > 0 && querySearchValue) {
       props.history.push(`/${searchQuery}`)
     } else if (queryPathValue === "/")  {
-      this.props.history.push("/dogs");
+      props.history.push("/dogs");
     } else {
       tag = queryPathValue.replace("/", "");
     }
@@ -36,17 +38,18 @@ class PhotoContainer extends Component {
   }
 
 
-  handleFetchResult(response) {
+  handleDisplayResult(response, tag) {
     if (response.length > 0){
       return response;
     } else if (response.length === 0 && this.state.statusText === 'ok'){
-      return <h1> Sorry! please search for something else. </h1>
+      return <h1> {`Sorry! No results for ${tag}, please search for something else.`} </h1>
     } else {
       return <Loading />
     }
   }
 
   componentDidMount(){
+    this._isMounted = true;
     const currentTag = this.handleTagChange(this.props)
 
     fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${api_key}&tags=${currentTag}&per_page=24&format=json&nojsoncallback=1`)
@@ -61,16 +64,23 @@ class PhotoContainer extends Component {
       })
       .then(response => response.json())
       .then(response => {
-        this.setState({
-          imageData: response.photos.photo,
-          statusText: response.stat
-        })
+        if (this._isMounted) {
+          this.setState({
+            imageData: response.photos.photo,
+            statusText: response.stat
+          })
+        }
       })
       .catch(error => console.error(`Error in fetch: ${error.message}`))
   }
 
+  componentWillUnmount(){
+    this._isMounted = false;
+  }
+
 
   render(){
+    const currentTag = this.handleTagChange(this.props);
 
     const imageLists = this.state.imageData.map( image => {
         return(
@@ -87,9 +97,9 @@ class PhotoContainer extends Component {
 
     return (
       <div className="photo-container">
-        <h2>Results</h2>
+        <h2>Results for {currentTag}</h2>
         <ul>
-          {this.handleFetchResult(imageLists)}
+          { this.handleDisplayResult(imageLists, currentTag) }
         </ul>
       </div>
     )
@@ -97,6 +107,3 @@ class PhotoContainer extends Component {
 }
 
 export default PhotoContainer;
-
-// console.log(this.props.history.push("/search"));
-//

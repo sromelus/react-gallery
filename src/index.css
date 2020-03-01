@@ -34,8 +34,8 @@ a {
   text-decoration: none;
 }
 
-.loading-text {
-  text-align: center;
+#loading-text {
+  margin: auto, 0;
 }
 
 .search-form {
