@@ -10,12 +10,13 @@ class App extends Component {
 
 render(){
   return (
-    <BrowserRouter>
+    <BrowserRouter >
       <div className="container">
         <SearchForm />
         <Nav />
         <Switch>
           <Route exact path="/" component={ PhotoContainer} />
+          {/* key props allows Route to mount the same component from different path  */}
           <Route path="/dogs" key='1' component={ PhotoContainer} />
           <Route path="/cars" key='2' component={ PhotoContainer} />
           <Route path="/planes" key='3' component={ PhotoContainer} />

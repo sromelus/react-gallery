@@ -7,7 +7,8 @@ import config from '../config'
 const api_key = config;
 
 class PhotoContainer extends Component {
-  _isMounted = false;
+  // isMounted is a variable that check if the component is mounted
+  componentisMounted = false;
 
   constructor() {
    super();
@@ -18,6 +19,7 @@ class PhotoContainer extends Component {
   }
 
 
+// handleTagChange returns a string "Tag" from props provided to PhotoContainer by Routes
 
   handleTagChange(props) {
     let tag = ' '
@@ -37,7 +39,7 @@ class PhotoContainer extends Component {
     return tag;
   }
 
-
+// handleDisplayResult manages what to render based on the response.
   handleDisplayResult(response, tag) {
     if (response.length > 0){
       return response;
@@ -49,7 +51,7 @@ class PhotoContainer extends Component {
   }
 
   componentDidMount(){
-    this._isMounted = true;
+    this.componentisMounted = true;
     const currentTag = this.handleTagChange(this.props)
 
     fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${api_key}&tags=${currentTag}&per_page=24&format=json&nojsoncallback=1`)
@@ -64,7 +66,7 @@ class PhotoContainer extends Component {
       })
       .then(response => response.json())
       .then(response => {
-        if (this._isMounted) {
+        if (this.componentisMounted) {
           this.setState({
             imageData: response.photos.photo,
             statusText: response.stat
@@ -75,7 +77,8 @@ class PhotoContainer extends Component {
   }
 
   componentWillUnmount(){
-    this._isMounted = false;
+    // Redirecting in handleTagChange will unmount the component and reseting isMounted to false thus preventing it from setting state.
+    this.componentisMounted = false;
   }
 
 

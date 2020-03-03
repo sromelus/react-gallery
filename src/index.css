@@ -34,8 +34,8 @@ a {
   text-decoration: none;
 }
 
-#loading-text {
-  margin: auto, 0;
+.loading-text {
+  margin: auto;
 }
 
 .search-form {

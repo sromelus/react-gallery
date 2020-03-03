@@ -1,5 +1,4 @@
 import React from 'react';
-// import PhotoContainer from './PhotoContainer'
 import { NavLink } from 'react-router-dom';
 
 
