@@ -5,6 +5,7 @@ React Gallery is an application that displays a collection of 25 images from fli
 
 ##Installation
 
+```bash
  1. run git clone
  2. nmp install - will install all dependencies
  3. A flickr api key is required in order to run the application. Please use this link to get an [api key](https://www.flickr.com/services/api)
@@ -15,3 +16,4 @@ React Gallery is an application that displays a collection of 25 images from fli
      `export default API_KEY;`
 
  4. npm start - app listens on localhost:3000
+```
