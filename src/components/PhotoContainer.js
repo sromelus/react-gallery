@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PhotoTile from './PhotoTile'
 import Loading from './Loading'
+import NoSearchResult from './/NoSearchResult'
 import queryString from 'query-string'
 import config from '../config'
 
 const api_key = config;
 
 class PhotoContainer extends Component {
-  // isMounted is a variable that check if the component is mounted
+  // componentisMounted is a variable that check if the component is mounted
   componentisMounted = false;
 
   constructor() {
@@ -24,17 +25,17 @@ class PhotoContainer extends Component {
   handleTagChange(props) {
     let tag = ' '
     const searchQuery = props.location.search;
-    const querySearchValue = queryString.parse(props.location.search).search;
-    const queryPathValue = props.match.url;
-
-    if(queryPathValue === "/" && querySearchValue){
-      tag = querySearchValue;
-    } else if (queryPathValue.length > 0 && querySearchValue) {
+    const searchQueryValue = queryString.parse(props.location.search).search;
+    const pathValue = props.match.url;
+    
+    if(pathValue === "/" && searchQueryValue){
+      tag = searchQueryValue;
+    } else if (pathValue.length > 0 && searchQueryValue) {
       props.history.push(`/${searchQuery}`)
-    } else if (queryPathValue === "/")  {
+    } else if (pathValue === "/")  {
       props.history.push("/dogs");
     } else {
-      tag = queryPathValue.replace("/", "");
+      tag = pathValue.replace("/", "");
     }
     return tag;
   }
@@ -44,7 +45,7 @@ class PhotoContainer extends Component {
     if (response.length > 0){
       return response;
     } else if (response.length === 0 && this.state.statusText === 'ok'){
-      return <h1> {`Sorry! No results for ${tag}, please search for something else.`} </h1>
+      return <NoSearchResult tag={tag} />
     } else {
       return <Loading />
     }
@@ -77,7 +78,7 @@ class PhotoContainer extends Component {
   }
 
   componentWillUnmount(){
-    // Redirecting in handleTagChange will unmount the component and reseting isMounted to false thus preventing it from setting state.
+    // Redirecting in handleTagChange will unmount the component and reseting componentisMounted to false thus preventing it from setting state.
     this.componentisMounted = false;
   }
 
@@ -100,7 +101,7 @@ class PhotoContainer extends Component {
 
     return (
       <div className="photo-container">
-        <h2>Results for {currentTag}</h2>
+        <h3>Images of {currentTag}</h3>
         <ul>
           { this.handleDisplayResult(imageLists, currentTag) }
         </ul>
