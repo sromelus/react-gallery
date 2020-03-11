@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PhotoTile from './PhotoTile'
 import Loading from './Loading'
+import SearchForm from './SearchForm';
+import Nav from './Nav';
 import NoSearchResult from './/NoSearchResult'
 import queryString from 'query-string'
 import config from '../config'
@@ -25,9 +27,9 @@ class PhotoContainer extends Component {
   handleTagChange(props) {
     let tag = ' '
     const searchQuery = props.location.search;
-    const searchQueryValue = queryString.parse(props.location.search).search;
+    const searchQueryValue = queryString.parse(searchQuery).search;
     const pathValue = props.match.url;
-    
+
     if(pathValue === "/" && searchQueryValue){
       tag = searchQueryValue;
     } else if (pathValue.length > 0 && searchQueryValue) {
@@ -84,6 +86,10 @@ class PhotoContainer extends Component {
 
 
   render(){
+    // variable to hold description of list of images
+    let descriptionText = " ";
+
+    // this function retrieve the tag from the url and store it currentTag
     const currentTag = this.handleTagChange(this.props);
 
     const imageLists = this.state.imageData.map( image => {
@@ -99,13 +105,21 @@ class PhotoContainer extends Component {
         )
       })
 
+    if(imageLists.join().trim()){
+      descriptionText = `Images of ${currentTag}`
+    }
+
     return (
-      <div className="photo-container">
-        <h3>Images of {currentTag}</h3>
-        <ul>
+      <>
+        <SearchForm />
+        <Nav />
+        <div className="photo-container">
+          <h3>{ descriptionText }</h3>
+          <ul>
           { this.handleDisplayResult(imageLists, currentTag) }
-        </ul>
-      </div>
+          </ul>
+        </div>
+      </>
     )
   }
 }

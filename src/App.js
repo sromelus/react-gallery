@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import SearchForm from './components/SearchForm';
-import Nav from './components/Nav';
 import PhotoContainer from './components/PhotoContainer';
 import NotFound from './components/NotFound';
 
@@ -12,8 +10,6 @@ render(){
   return (
     <BrowserRouter >
       <div className="container">
-        <SearchForm />
-        <Nav />
         <Switch>
           <Route exact path="/" component={ PhotoContainer} />
           {/* key props allows Route to mount the same component from different path  */}

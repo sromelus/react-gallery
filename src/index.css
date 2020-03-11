@@ -53,6 +53,15 @@ a {
   cursor: pointer;
 }
 
+.home-button {
+  background-color: #438bbd;
+  font-size: 15px;
+  color: #fff;
+  padding: 10px 30px;
+  border-radius: 0.35em;
+  cursor: pointer;
+}
+
 input {
   font-size: 1em;
   width: 100%;
